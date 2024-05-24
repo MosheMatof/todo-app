@@ -12,8 +12,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       scope: ['email', 'profile'],
     });
   }
-
-  // make sure to add this or else you won't get the refresh token
   authorizationParams(): { [key: string]: string } {
     return {
       access_type: 'offline',
@@ -31,8 +29,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
     const user = {
       email: emails[0].value,
-      firstName: name.givenName,
-      lastName: name.familyName,
+      name: name.givenName + ' ' + name.familyName,
       picture: photos[0].value,
       accessToken,
       refreshToken,
