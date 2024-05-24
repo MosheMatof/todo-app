@@ -1,0 +1,25 @@
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  body {
+    width: 90%;
+  }
+}
+
+@media (max-width: 800px) {
+  body {
+    width: 95%;
+  }
+}
