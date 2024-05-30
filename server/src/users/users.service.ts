@@ -19,11 +19,15 @@ export class UsersService {
     }
 
     async updateUser(id: number, user: User): Promise<User> {
-        const updatedUser = await this.userRepository.preload({
-            id,
-            ...user,
-        });
-        return this.userRepository.save(updatedUser);
+        try {
+            const updatedUser = await this.userRepository.preload({
+                id,
+                ...user,
+            });
+            return this.userRepository.save(updatedUser);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async deleteUser(id: number): Promise<void> {

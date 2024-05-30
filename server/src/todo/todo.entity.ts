@@ -7,10 +7,16 @@ export class Todo {
   id: number;
 
   @Column()
+  userName: string;
+
+  @Column()
   title: string;
 
   @Column()
   description: string;
+
+  @Column()
+  dueDate: Date;
 
   @Column()
   completed: boolean;

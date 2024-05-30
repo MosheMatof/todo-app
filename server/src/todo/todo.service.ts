@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Todo } from './todo.entity';
@@ -10,8 +10,12 @@ export class TodoService {
     private todoRepository: Repository<Todo>,
   ) {}
 
-  async getAllTodos(): Promise<Todo[]> {
-    return this.todoRepository.find();
+  async getAllTodos(userName: string): Promise<Todo[]> {
+    const todos = await this.todoRepository.findBy({ userName });
+    if (todos.length === 0) {
+      throw new NotFoundException('No todos found');
+    }
+    return todos;
   }
 
   async createTodo(todo: Todo): Promise<Todo> {

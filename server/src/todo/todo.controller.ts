@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Headers, BadRequestException } from '@nestjs/common';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 
@@ -7,8 +7,13 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
-  getAllTodos(): Promise<Todo[]> {
-    return this.todoService.getAllTodos();
+  async getAllTodos(@Headers('x-user-id') userNameBase64: string): Promise<Todo[]> {
+    try {
+      const userName = decodeURIComponent(Buffer.from(userNameBase64, 'base64').toString('utf-8'));
+      return await this.todoService.getAllTodos(userName);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Post()
