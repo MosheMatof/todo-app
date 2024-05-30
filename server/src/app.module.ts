@@ -20,9 +20,9 @@ import { join } from 'path';
     ConfigModule.forRoot({
       ignoreEnvFile: true,
     }),
-  // ServeStaticModule.forRoot({
-  //   rootPath: join(__dirname, '..', '..', 'client', 'dist',),
-  // }), 
+  ServeStaticModule.forRoot({
+    rootPath: join(__dirname, '..', '..', 'client', 'dist',),
+  }), 
   AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],

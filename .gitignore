@@ -36,6 +36,9 @@
 !**/.vscode/launch.json
 !**/.vscode/extensions.json
 
+# db
+server/db.sqlite
+
 # dotenv environment variable files
 **/.env
 **/.env.development.local
@@ -55,3 +58,4 @@
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 **/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+.gitignore
