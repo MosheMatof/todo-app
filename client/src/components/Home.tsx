@@ -1,37 +1,85 @@
-//home component
-
-import React from 'react';
-import { Button, Typography } from 'antd';
-import { GoogleOutlined } from '@ant-design/icons';
+import { useEffect } from 'react';
+import { Layout, Badge, Avatar, ConfigProvider, Button, Typography, Space, theme, Flex } from 'antd';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Header, Content, Footer } from 'antd/es/layout/layout';
+import TodoList from './TodoList';
 
 const { Title } = Typography;
 
 function Home() {
     const { currentUser, logout } = useAuth();
-    
+    const navigate = useNavigate();
+
+    const numberOfUncompletedTodos = Array.isArray(currentUser?.todos) 
+    ? currentUser.todos.filter((todo) => !todo.completed).length
+    : 0;
+    useEffect(() => {
+        if (!currentUser) {
+            navigate('/signin');
+        }
+    }, [currentUser, navigate]);
+
     const handleLogout = async () => {
         try {
         await logout();
+        navigate('/signin');
         } catch (error) {
         console.error('Failed to log out', error);
         }
     };
     
     return (
-        <div style={{ padding: '40px', border: '1px solid #d9d9d9', borderRadius: '6px' }}>
-        <Title level={3} style={{ textAlign: 'center' }}>
-            Home
-        </Title>
-    
+        <ConfigProvider theme={
+            {
+                components: {
+                    Layout: {
+                        headerBg: '#30C8BDff',
+                        headerPadding: '0 20px',
+                    },
+                },
+            }
+        }>    
         {currentUser ? (
-            <div>
-            <p>Welcome, {currentUser.email}!</p>
-            <Button type="primary" onClick={handleLogout}>
-                Log out
-            </Button>
-            </div>
+            <Layout style={{height: '100vh', width: '100vw'}}>
+            <Header>
+              <Flex align='center' justify='space-between'>
+                <Space align='end' size={'middle'}>
+                <>
+                <Badge count={numberOfUncompletedTodos}>
+
+                    {currentUser.picture ? (
+                    <Avatar
+                        src={currentUser.picture}
+                        style={{ cursor: 'pointer' }}
+                        icon={<UserOutlined />}
+                    >
+                        <UserOutlined />
+                    </Avatar>
+                    ) : (
+                    <Avatar icon={<UserOutlined />} style={{ cursor: 'pointer' }} />
+                    )}
+                </Badge>
+                    <Title level={5} style={{ color: 'white' }}>
+                     {currentUser.name}
+                    </Title>
+                </>
+                </Space>
+                <Button
+                    type="text"
+                    onClick={handleLogout}
+                    icon={<LogoutOutlined />}
+                    >
+                    Logout
+                </Button>
+              </Flex>
+            </Header>
+            <Content style={{padding: '10px'}}>
+              <TodoList />
+            </Content>
+            {/* <Footer style={{ textAlign: 'center' }}>Footer Content</Footer> */}
+          </Layout>
         ) : (
             <div>
             <p>You are not logged in</p>
@@ -39,7 +87,7 @@ function Home() {
             <Link to="/signup">Sign Up</Link>
             </div>
         )}
-        </div>
+        </ConfigProvider>
     );
 }
 

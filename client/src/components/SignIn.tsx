@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { Form, Input, Button, Divider, Typography, Space, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import GoogleLoginButton from './GoogleLoginButton'
 import logo from '../assets/logo.png';
@@ -9,12 +10,20 @@ import logo from '../assets/logo.png';
 const { Title } = Typography;
 
 function SignIn() {
-  const { login } = useAuth();
+  const {currentUser, login } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (currentUser) {
+          navigate('/');
+      }
+  }, [currentUser, navigate]);
 
   const onFinish = async (values: { username: string; password: string }) => {
     const user = await login(values.username, values.password);
     if (user) {
       message.success('Sign in successfully');
+      navigate('/');
     } else {
       message.error('Sign in failed');
     }
@@ -23,10 +32,7 @@ function SignIn() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
     <div style={{ padding: '40px', border: '1px solid #d9d9d9', borderRadius: '6px', width: '300px', textAlign: 'center',}}>
-      <Title level={3}>
-        Sign In
-      </Title>
-      <img src={logo} alt="logo" style={{ width: '70px', height: '70px', marginBottom: '20px' }} />
+      <img src={logo} alt="logo" style={{ width: '90px', height: '90px', marginBottom: '20px' }} />
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Form name="signin" onFinish={onFinish} >
         <Form.Item
