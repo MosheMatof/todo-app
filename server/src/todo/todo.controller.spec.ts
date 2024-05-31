@@ -34,23 +34,24 @@ describe('TodoController', () => {
   });
 
   it('should return all todos', async () => {
-    const todos = [{ id: 1, title: 'Todo 1', description: 'Description 1', completed: false }];
-    jest.spyOn(service, 'getAllTodos').mockResolvedValue(todos);
-    expect(await controller.getAllTodos()).toEqual(todos);
-  });
+  const userName = 'User1';
+  const todos = [{ id: 1, userName: userName, title: 'Todo 1', description: 'Description 1', dueDate: new Date(), completed: false }];
+  jest.spyOn(service, 'getAllTodos').mockResolvedValue(todos);
+  expect(await controller.getAllTodos(userName)).toEqual(todos);
+});
 
-  it('should create a new todo', async () => {
-    const todo = { id: 1, title: 'Todo 1', description: 'Description 1', completed: false };
-    expect(await controller.createTodo(todo)).toEqual(todo);
-  });
+it('should create a new todo', async () => {
+  const todo = { id: 1, userName: 'User1', title: 'Todo 1', description: 'Description 1', dueDate: new Date(), completed: false };
+  jest.spyOn(service, 'createTodo').mockResolvedValue(todo);
+  expect(await controller.createTodo(todo)).toEqual(todo);
+});
 
-  it('should update an existing todo', async () => {
-    const todo = { id: 1, title: 'Updated Todo', description: 'Updated Description', completed: true };
-    const updatedTodo = { id: 1, title: 'Updated Todo', description: 'Updated Description', completed: true };
-    expect(await controller.updateTodo('1', todo)).toEqual(updatedTodo);
-  });
-
-  
+it('should update an existing todo', async () => {
+  const todo = { id: 1, userName: 'User1', title: 'Updated Todo', description: 'Updated Description', dueDate: new Date(), completed: true };
+  const updatedTodo = { id: 1, userName: 'User1', title: 'Updated Todo', description: 'Updated Description', dueDate: new Date(), completed: true };
+  jest.spyOn(service, 'updateTodo').mockResolvedValue(updatedTodo);
+  expect(await controller.updateTodo('1', todo)).toEqual(updatedTodo);
+});
   it('should delete an existing todo', async () => {
     const id = '1';
     const deleteMock = jest.spyOn(service['todoRepository'], 'delete');
