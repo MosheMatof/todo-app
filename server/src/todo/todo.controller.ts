@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Headers, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Headers, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 
@@ -12,7 +12,11 @@ export class TodoController {
       const userName = decodeURIComponent(Buffer.from(userNameBase64, 'base64').toString('utf-8'));
       return await this.todoService.getAllTodos(userName);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      } else {
+        throw new BadRequestException(error.message);
+      }
     }
   }
 
