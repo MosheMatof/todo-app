@@ -52,7 +52,7 @@ const TodoModal: React.FC<TodoProps> = ({ visible, onCancel, onOk, todo }) => {
       onCancel={onCancel}
       onOk={handleOk}
       title={todo ? 'Update Todo' : 'Create Todo'}
-      
+      width={300}
     >
       <Form form={form} layout="vertical">
         <Form.Item
