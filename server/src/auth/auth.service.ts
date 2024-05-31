@@ -37,6 +37,9 @@ export class AuthService {
     
       // Send the response
       res.status(HttpStatus.OK).json({ user: {name: user.userName, picture: user.picture } });
+
+      // log to the console
+      console.log(`User ${user.userName} has logged in`);
     }
 
     async signUp(@Res() res: Response, name: string, pass: string): Promise<any> {
@@ -56,6 +59,8 @@ export class AuthService {
 
       // Send the response
       res.status(HttpStatus.OK).json({ user: {name: user.userName, picture: user.picture } });
+
+      console.log(`User ${user.userName} has logged in`);
     }
 
     async googleLogin(res: Response, idToken: string) {
@@ -84,6 +89,7 @@ export class AuthService {
   
         res.cookie('access_token', token, { httpOnly: true, sameSite: 'strict' });
         res.status(HttpStatus.OK).json({ user: { name: name } });
+        console.log(`User ${name} has logged in`);
       } catch (error) {
         throw new UnauthorizedException('Invalid Google ID token');
       }
